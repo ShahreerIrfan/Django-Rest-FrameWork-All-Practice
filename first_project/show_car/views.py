@@ -39,4 +39,3 @@ def car_details_view(request,pk):
     car = models.carList.objects.get(pk=pk)
     serializer = CarSerializer(car)
     return Response(serializer.data)
-.
