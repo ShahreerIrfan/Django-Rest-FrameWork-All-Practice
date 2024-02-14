@@ -1,11 +1,24 @@
 from rest_framework import serializers
-from ..models import carList
+from ..models import carList,ShowRoom
+
 
 def alphanumberic(value):
     if not str(value).isalnum():
         raise serializers.ValidationError("Only alphanumeric chanacters are allowed")
 
-class CarSerializer(serializers.Serializer):
+class CarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = carList
+        fields = "__all__"
+
+class ShowRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShowRoom
+        fields = "__all__"
+
+
+    """
+    This is for normal serializer
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length = 40)
     description = serializers.CharField(max_length = 500)
@@ -24,6 +37,7 @@ class CarSerializer(serializers.Serializer):
         instance.price = validated_data.get('price',instance.price)
         instance.save()
         return instance
+    """
     def validate_price(self,value):
         if value<20000.00:
             raise serializers.ValidationError("Price must be greater than 200")
