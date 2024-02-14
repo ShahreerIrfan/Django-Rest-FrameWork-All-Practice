@@ -3,6 +3,7 @@ from. import models
 from .api_file.serializers import CarSerializer
 from rest_framework.response import Response 
 from rest_framework.decorators import api_view
+from rest_framework import status
 # from django.http import JsonResponse
 # from django.http import HttpResponse
 # import json
@@ -42,10 +43,13 @@ def car_list_view(request):
         else:
             return Response(serializer.errors)
 
-@api_view(['GET','PUT'])
+@api_view(['GET','PUT','DELETE'])
 def car_details_view(request,pk):
     if request.method == 'GET':
-        car = models.carList.objects.get(pk=pk)
+        try:
+            car = models.carList.objects.get(pk=pk)
+        except:
+            return Response({'Error':'car not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = CarSerializer(car)
         return Response(serializer.data)
     if request.method == 'PUT':
@@ -55,5 +59,9 @@ def car_details_view(request,pk):
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors,status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'DELETE':
+        car = models.carList.objects.get(pk=pk)
+        car.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
