@@ -43,6 +43,11 @@ class Showroom_view(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+class ShowRoomDetailsView(APIView):
+    def get(self,request,pk):
+        showroom = models.ShowRoom.objects.get(pk=pk)
+        serializer = ShowRoomSerializer(showroom)
+        return Response(serializer.data)
 
 
 @api_view(['GET','POST'])
@@ -80,4 +85,3 @@ def car_details_view(request,pk):
         car = models.carList.objects.get(pk=pk)
         car.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
