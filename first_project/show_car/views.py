@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from. import models
-from .api_file.serializers import CarSerializer,ShowRoomSerializer
+from .api_file.serializers import CarSerializer,ShowRoomSerializer,ReviewSerializer
 from rest_framework.response import Response 
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -60,11 +60,26 @@ class ShowRoomDetailsView(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-        
     def delete(self,request,pk):
         showroom = models.ShowRoom.objects.get(pk=pk)
         showroom.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class Review_view(APIView):
+    def get(self,request):
+        reviews = models.Review.objects.all()  # Renamed from 'review' to 'reviews' for clarity
+        serializer = ReviewSerializer(reviews, many=True)  # Pass many=True for a queryset
+        return Response(serializer.data)
+    
+    def post(self,request):
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+        
+
 
 
             

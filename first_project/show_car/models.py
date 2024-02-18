@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxLengthValidator,MinLengthValidator
 
 # Create your models here.
 
@@ -21,3 +22,13 @@ class carList(models.Model):
     showroom = models.ForeignKey(ShowRoom, on_delete=models.CASCADE, related_name="cars",)
     def __str__(self) -> str:
         return self.name
+    
+class Review(models.Model):
+    ratings = models.IntegerField(validators = [MaxLengthValidator,MinLengthValidator])
+    comments = models.CharField(max_length = 300,null = True)
+    car = models.ForeignKey(carList,on_delete = models.CASCADE,related_name = "Review",null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "The rating of " + self.car.name+":--" + str(self.ratings)
