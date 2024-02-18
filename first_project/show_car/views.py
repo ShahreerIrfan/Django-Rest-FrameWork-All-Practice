@@ -45,9 +45,31 @@ class Showroom_view(APIView):
             return Response(serializer.errors)
 class ShowRoomDetailsView(APIView):
     def get(self,request,pk):
-        showroom = models.ShowRoom.objects.get(pk=pk)
+        try:
+            showroom = models.ShowRoom.objects.get(pk=pk)
+        except models.ShowRoom.DoesNotExist:
+            return Response({'error':'showroom not found'},status=status.HTTP_404_NOT_FOUND)
         serializer = ShowRoomSerializer(showroom)
         return Response(serializer.data)
+        
+    def put(self,request,pk):
+        showroom = models.ShowRoom.objects.get(pk=pk)
+        serializer = ShowRoomSerializer(showroom,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self,request,pk):
+        showroom = models.ShowRoom.objects.get(pk=pk)
+        showroom.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+            
+
+        
 
 
 @api_view(['GET','POST'])
