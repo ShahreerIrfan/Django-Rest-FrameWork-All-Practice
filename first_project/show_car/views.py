@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import mixins,generics
 from rest_framework.authentication import BasicAuthentication,SessionAuthentication
-from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser,DjangoModelPermissions
+from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser,DjangoModelPermissions,BasePermission
 # from django.http import JsonResponse
 # from django.http import HttpResponse
 # import json
@@ -110,13 +110,13 @@ class CarSpecificationListView(generics.ListCreateAPIView):
     queryset = models.CarSpecification.objects.all()
     serializer_class = CarSpecificationSerializer
     authentication_classes = [SessionAuthentication]
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAuthenticated]
 
 class CarSpecificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.CarSpecification.objects.all()
     serializer_class = CarSpecificationSerializer
     authentication_classes = [SessionAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [DjangoModelPermissions]
 
             
 
