@@ -9,4 +9,6 @@ urlpatterns = [
     path('showroom/<int:pk>', views.ShowRoomDetailsView.as_view(),name="showroom"),
     path('review/', views.Review_view.as_view(),name="review"),
     path('review/<int:pk>', views.ReviewtDetail.as_view(),name="review-Details"),
+    path('space/',views.CarSpecificationListView.as_view(),name='space'),
+    path('space/<int:pk>',views.CarSpecificationDetailsView.as_view(),name='car-details')
 ]

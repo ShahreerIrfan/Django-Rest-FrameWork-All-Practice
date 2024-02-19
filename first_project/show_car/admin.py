@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import carList,ShowRoom,Review
+from . models import carList,ShowRoom,Review,CarSpecification
 
 # Register your models here.
 
@@ -13,3 +13,4 @@ class ShowRoomModelAdmin(admin.ModelAdmin):
 admin.site.register(carList,Car_listModelAdmin)
 admin.site.register(ShowRoom,ShowRoomModelAdmin)
 admin.site.register(Review)
+admin.site.register(CarSpecification)

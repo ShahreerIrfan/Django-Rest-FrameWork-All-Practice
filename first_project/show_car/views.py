@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from. import models
-from .api_file.serializers import CarSerializer,ShowRoomSerializer,ReviewSerializer
+from .api_file.serializers import CarSerializer,ShowRoomSerializer,ReviewSerializer,CarSpecificationSerializer
 from rest_framework.response import Response 
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -96,8 +96,6 @@ class ReviewtDetail(mixins.RetrieveModelMixin,
                     generics.GenericAPIView):
     queryset = models.Review.objects.all()
     serializer_class = ReviewSerializer
-    
-
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
@@ -106,7 +104,19 @@ class ReviewtDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+    
 
+class CarSpecificationListView(generics.ListCreateAPIView):
+    queryset = models.CarSpecification.objects.all()
+    serializer_class = CarSpecificationSerializer
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [DjangoModelPermissions]
+
+class CarSpecificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.CarSpecification.objects.all()
+    serializer_class = CarSpecificationSerializer
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
 
             
 

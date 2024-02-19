@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import carList,ShowRoom,Review
+from ..models import carList,ShowRoom,Review,CarSpecification
 
 
 def alphanumberic(value):
@@ -24,6 +24,11 @@ class ShowRoomSerializer(serializers.ModelSerializer):
     cars = serializers.StringRelatedField(many = True)
     class Meta:
         model = ShowRoom
+        fields = "__all__"
+
+class CarSpecificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CarSpecification
         fields = "__all__"
 
 

@@ -32,3 +32,22 @@ class Review(models.Model):
 
     def __str__(self):
         return "The rating of " + self.car.name+":--" + str(self.ratings)
+    
+class CarSpecification(models.Model):
+    CAR_CATEGORIES = [
+        ('sedan', 'Sedan'),
+        ('hatchback', 'Hatchback'),
+        ('SUV', 'SUV'),
+        ('truck', 'Truck'),
+        ('electric', 'Electric')
+    ]
+
+    CarName = models.CharField(max_length=50)
+    CarPrice = models.IntegerField()
+    Category = models.CharField(max_length=50, choices=CAR_CATEGORIES)
+    Description = models.TextField()
+
+    def __str__(self):
+        return self.CarName
+
+    
