@@ -116,7 +116,7 @@ class CarSpecificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.CarSpecification.objects.all()
     serializer_class = CarSpecificationSerializer
     authentication_classes = [SessionAuthentication]
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [DjangoModelPermissions] 
 
             
 
