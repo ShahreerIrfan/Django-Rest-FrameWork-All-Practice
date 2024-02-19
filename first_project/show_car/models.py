@@ -51,6 +51,6 @@ class CarSpecification(models.Model):
         return self.CarName
     
 
-# ...
+# ..
 
     
