@@ -6,8 +6,8 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import mixins,generics
-from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser
+from rest_framework.authentication import BasicAuthentication,SessionAuthentication
+from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser,DjangoModelPermissions
 # from django.http import JsonResponse
 # from django.http import HttpResponse
 # import json
@@ -34,9 +34,11 @@ from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser
 #     return JsonResponse(data)
 
 class Showroom_view(APIView):
-    authentication_classes = [BasicAuthentication]
+    # authentication_classes = [BasicAuthentication]
     # permission_classes = [IsAuthenticated]
     # permission_classes = [AllowAny]
+    # permission_classes = [IsAdminUser]
+    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAdminUser]
     def get(self, request):
         showroom = models.ShowRoom.objects.all()
@@ -71,22 +73,39 @@ class ShowRoomDetailsView(APIView):
         showroom = models.ShowRoom.objects.get(pk=pk)
         showroom.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-class Review_view(APIView):
-    def get(self,request):
-        reviews = models.Review.objects.all()  # Renamed from 'review' to 'reviews' for clarity
-        serializer = ReviewSerializer(reviews, many=True)  # Pass many=True for a queryset
-        return Response(serializer.data)
-    
-    def post(self,request):
-        serializer = ReviewSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
+
+class Review_view(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  generics.GenericAPIView):
+    queryset = models.Review.objects.all()
+    # Shudu matro stuff user edit delete korte parbe
+    serializer_class = ReviewSerializer
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [DjangoModelPermissions]
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
         
 
+class ReviewtDetail(mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
+    queryset = models.Review.objects.all()
+    serializer_class = ReviewSerializer
+    
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 
             
@@ -96,6 +115,7 @@ class Review_view(APIView):
 
 @api_view(['GET','POST'])
 def car_list_view(request):
+    
     if request.method == 'GET':
         cars = models.carList.objects.all()
         serializer = CarSerializer(cars,many=True)
