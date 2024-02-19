@@ -49,5 +49,8 @@ class CarSpecification(models.Model):
 
     def __str__(self):
         return self.CarName
+    
+
+# ...
 
     
