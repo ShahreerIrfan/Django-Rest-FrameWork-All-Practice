@@ -52,5 +52,4 @@ class CarSpecification(models.Model):
     
 
 # ..
-
     
