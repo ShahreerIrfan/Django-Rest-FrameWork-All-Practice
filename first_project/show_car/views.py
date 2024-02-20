@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework import mixins,generics
 from rest_framework.authentication import BasicAuthentication,SessionAuthentication
 from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser,DjangoModelPermissions,BasePermission
+from rest_framework import viewsets
 # from django.http import JsonResponse
 # from django.http import HttpResponse
 # import json
@@ -117,6 +118,7 @@ class CarSpecificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CarSpecificationSerializer
     authentication_classes = [SessionAuthentication]
     permission_classes = [DjangoModelPermissions] 
+
 
             
 
